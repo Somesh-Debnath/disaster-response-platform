@@ -1,0 +1,374 @@
+{
+	"info": {
+		"_postman_id": "disaster-response-api",
+		"name": "Disaster Response API",
+		"description": "Complete API collection for Disaster Response Coordination Platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Disasters",
+			"item": [
+				{
+					"name": "Get All Disasters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters"]
+						}
+					}
+				},
+				{
+					"name": "Get Disasters by Tag",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters?tag=flood",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters"],
+							"query": [
+								{
+									"key": "tag",
+									"value": "flood"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Disaster by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}"]
+						}
+					}
+				},
+				{
+					"name": "Create Disaster",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Test Flood Disaster\",\n  \"locationName\": \"Brooklyn, NYC\",\n  \"description\": \"Heavy flooding in Brooklyn area affecting multiple neighborhoods.\",\n  \"tags\": [\"flood\", \"urgent\", \"brooklyn\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters"]
+						}
+					}
+				},
+				{
+					"name": "Update Disaster",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Flood Disaster\",\n  \"description\": \"Updated description with new information.\",\n  \"tags\": [\"flood\", \"urgent\", \"brooklyn\", \"updated\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}"]
+						}
+					}
+				},
+				{
+					"name": "Delete Disaster",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Resources",
+			"item": [
+				{
+					"name": "Get Resources by Disaster",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}/resources",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}", "resources"]
+						}
+					}
+				},
+				{
+					"name": "Get Resources Near Location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}/resources?lat=40.7128&lon=-74.0060&radiusKm=5.0",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}", "resources"],
+							"query": [
+								{
+									"key": "lat",
+									"value": "40.7128"
+								},
+								{
+									"key": "lon",
+									"value": "-74.0060"
+								},
+								{
+									"key": "radiusKm",
+									"value": "5.0"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Nearby Resources",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}/resources/nearby?lat=40.7128&lon=-74.0060&radiusKm=10.0",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}", "resources", "nearby"],
+							"query": [
+								{
+									"key": "lat",
+									"value": "40.7128"
+								},
+								{
+									"key": "lon",
+									"value": "-74.0060"
+								},
+								{
+									"key": "radiusKm",
+									"value": "10.0"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Resource",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Emergency Shelter\",\n  \"locationName\": \"Queens, NYC\",\n  \"type\": \"shelter\",\n  \"latitude\": 40.7282,\n  \"longitude\": -73.7949,\n  \"description\": \"Emergency shelter for flood victims\",\n  \"capacity\": 100,\n  \"contactInfo\": \"1-800-SHELTER\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}/resources",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}", "resources"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Social Media",
+			"item": [
+				{
+					"name": "Get Social Media Reports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}/social-media",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}", "social-media"]
+						}
+					}
+				},
+				{
+					"name": "Get Social Media Reports with Keyword",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}/social-media?keyword=floodrelief",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}", "social-media"],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "floodrelief"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Mock Social Media Reports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}/social-media/mock",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}", "social-media", "mock"]
+						}
+					}
+				},
+				{
+					"name": "Refresh Social Media Reports",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}/social-media/refresh",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}", "social-media", "refresh"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Official Updates",
+			"item": [
+				{
+					"name": "Get Official Updates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}/official-updates",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}", "official-updates"]
+						}
+					}
+				},
+				{
+					"name": "Refresh Official Updates",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}/official-updates/refresh",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}", "official-updates", "refresh"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Image Verification",
+			"item": [
+				{
+					"name": "Verify Image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"imageUrl\": \"https://example.com/disaster-image.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/disasters/{{disasterId}}/verify-image",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "disasters", "{{disasterId}}", "verify-image"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Geocoding",
+			"item": [
+				{
+					"name": "Geocode Location",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"locationName\": \"Manhattan, NYC\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/geocode",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "geocode"]
+						}
+					}
+				},
+				{
+					"name": "Extract and Geocode Location",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"locationName\": \"Heavy flooding reported in Lower East Side, Manhattan area with multiple road closures.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/geocode/extract",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "geocode", "extract"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "disasterId",
+			"value": "your-disaster-id-here",
+			"type": "string"
+		}
+	]
+} 

@@ -12,17 +12,15 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResourceDto {
+public class OfficialUpdateDto {
     private UUID id;
     private UUID disasterId;
-    private String name;
-    private String locationName;
-    private Double latitude;
-    private Double longitude;
-    private String type;
-    private LocalDateTime createdAt;
-    private String status;
-    private String description;
-    private Integer capacity;
+    private String source;
+    private String title;
+    private String content;
+    private String url;
+    private LocalDateTime publishedAt;
+    private String priority;
+    private String category;
     private String contactInfo;
 } 

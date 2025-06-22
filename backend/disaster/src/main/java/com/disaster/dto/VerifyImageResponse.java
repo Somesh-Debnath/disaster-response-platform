@@ -4,11 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class VerifyImageResponse {
+    private UUID disasterId;
     private String imageUrl;
-    private boolean authentic;
+    private String verificationResult;
+    private boolean verified;
     private String analysis; // To hold details from Gemini
 } 

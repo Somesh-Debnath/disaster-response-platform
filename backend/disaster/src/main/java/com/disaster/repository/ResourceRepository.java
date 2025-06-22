@@ -23,4 +23,21 @@ public interface ResourceRepository extends JpaRepository<Resource, UUID> {
      */
     @Query("SELECT r FROM Resource r WHERE dwithin(r.location, :point, :distance, true) = true")
     List<Resource> findResourcesWithinDistance(@Param("point") Point point, @Param("distance") double distance);
+
+    /**
+     * Finds resources for a specific disaster.
+     */
+    List<Resource> findByDisasterId(UUID disasterId);
+
+    /**
+     * Finds resources near a location for a specific disaster.
+     */
+    @Query("SELECT r FROM Resource r WHERE r.disaster.id = :disasterId AND dwithin(r.location, :point, :distance, true) = true")
+    List<Resource> findResourcesNearLocation(@Param("disasterId") UUID disasterId, @Param("point") Point point, @Param("distance") double distance);
+
+    /**
+     * Finds nearby resources regardless of disaster.
+     */
+    @Query("SELECT r FROM Resource r WHERE dwithin(r.location, :point, :distance, true) = true")
+    List<Resource> findNearbyResources(@Param("point") Point point, @Param("distance") double distance);
 } 
