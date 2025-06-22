@@ -4,11 +4,13 @@ import com.disaster.dto.GeocodeRequest;
 import com.disaster.dto.GeocodeResponse;
 import com.disaster.service.GeminiService;
 import com.disaster.service.GeocodingService;
-import com.disaster.service.GoogleMapsService;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -16,27 +18,42 @@ import org.springframework.stereotype.Service;
 public class GeocodingServiceImpl implements GeocodingService {
 
     private final GeminiService geminiService;
-    private final GoogleMapsService googleMapsService;
+    private final WebClient webClient;
 
-    @Value("${gemini.api.key}")
-    private String geminiApiKey;
+    @Value("${mapbox.api.key}")
+    private String mapboxApiKey;
 
-    @Value("${google.maps.api.key}")
-    private String googleMapsApiKey;
+    @Value("${mapbox.geocoding.url}")
+    private String mapboxGeocodingUrl;
 
     @Override
     public GeocodeResponse geocodeLocation(GeocodeRequest request) {
-        log.info("Geocoding location: {}", request.getLocationName());
-        
+        log.info("Geocoding location using Mapbox: {}", request.getLocationName());
         try {
-            // Use Google Maps Geocoding API to convert location name to coordinates
-            GeocodeResponse response = googleMapsService.geocode(request.getLocationName());
-            log.info("Geocoded location: {} -> lat: {}, lng: {}", 
-                    request.getLocationName(), response.getLatitude(), response.getLongitude());
-            return response;
+            JsonNode responseNode = webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(mapboxGeocodingUrl + "/" + request.getLocationName() + ".json")
+                            .queryParam("access_token", mapboxApiKey)
+                            .queryParam("limit", 1)
+                            .build())
+                    .retrieve()
+                    .bodyToMono(JsonNode.class)
+                    .block();
+
+            if (responseNode != null && responseNode.has("features") && responseNode.get("features").size() > 0) {
+                JsonNode firstFeature = responseNode.get("features").get(0);
+                JsonNode center = firstFeature.get("center");
+                double longitude = center.get(0).asDouble();
+                double latitude = center.get(1).asDouble();
+                log.info("Geocoded location: {} -> lat: {}, lng: {}", request.getLocationName(), latitude, longitude);
+                return new GeocodeResponse(request.getLocationName(), latitude, longitude);
+            } else {
+                log.warn("Could not geocode location: {}. No features found.", request.getLocationName());
+                return new GeocodeResponse(request.getLocationName(), 0.0, 0.0);
+            }
         } catch (Exception e) {
-            log.error("Error geocoding location: {}", request.getLocationName(), e);
-            // Return mock coordinates for Manhattan as fallback
+            log.error("Error geocoding location with Mapbox: {}", request.getLocationName(), e);
+            // Return fallback coordinates
             return new GeocodeResponse(request.getLocationName(), 40.7128, -74.0060);
         }
     }
@@ -46,11 +63,9 @@ public class GeocodingServiceImpl implements GeocodingService {
         log.info("Extracting and geocoding location from text: {}", request.getLocationName());
         
         try {
-            // First, use Gemini AI to extract location name from the text
             String extractedLocation = geminiService.extractLocation(request.getLocationName());
             log.info("Extracted location: {}", extractedLocation);
             
-            // Then geocode the extracted location
             GeocodeRequest geocodeRequest = new GeocodeRequest(extractedLocation);
             return geocodeLocation(geocodeRequest);
             

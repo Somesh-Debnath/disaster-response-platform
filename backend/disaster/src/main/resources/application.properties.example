@@ -1,0 +1,57 @@
+spring.application.name=disaster
+
+# Database Configuration (Supabase PostgreSQL)
+# Replace with your actual Supabase connection details
+# Find these at: Project Settings > Database > Connection info
+spring.datasource.url=jdbc:postgresql://db.your-project-ref.supabase.co:5432/postgres
+spring.datasource.username=postgres
+spring.datasource.password=your-supabase-db-password
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# JPA Configuration - Use validate since tables already exist
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# For PostgreSQL with PostGIS
+spring.jpa.properties.hibernate.dialect=org.hibernate.spatial.dialect.postgis.PostgisDialect
+
+# API Keys (replace with your actual keys)
+gemini.api.key=your_gemini_api_key
+
+# Server Configuration
+server.port=8080
+logging.level.com.disaster=DEBUG
+logging.level.org.springframework.web=DEBUG
+
+# CORS Configuration
+cors.allowed.origins=http://localhost:3000,http://localhost:8080,https://your-frontend-domain.com
+
+# Jackson Configuration
+spring.jackson.default-property-inclusion=NON_NULL
+spring.jackson.serialization.write-dates-as-timestamps=false
+
+# Twitter API Configuration
+twitter.api.key="your_twitter_api_key"
+twitter.api.secret="your_twitter_api_secret"
+twitter.bearer.token="your_twitter_bearer_token"
+twitter.search.keywords=#floodrelief,#disaster,#emergency,#NYC
+
+# FEMA Scraping Configuration
+fema.base.url=https://www.fema.gov
+fema.scrape.interval=30
+fema.search.keywords=flood,earthquake,NYC,New York
+
+# Red Cross Scraping Configuration
+redcross.base.url=https://www.redcross.org
+redcross.local.url=https://www.redcross.org/local/new-york
+redcross.scrape.interval=30
+
+# NYC EM Scraping Configuration
+nyc.em.base.url=https://www1.nyc.gov/site/em
+nyc.em.alerts.url=https://www1.nyc.gov/site/em/alerts.page
+nyc.em.scrape.interval=15
+
+# Mapbox Configuration
+mapbox.api.key="your_mapbox_api_key"
+mapbox.geocoding.url=https://api.mapbox.com/geocoding/v5/mapbox.places 

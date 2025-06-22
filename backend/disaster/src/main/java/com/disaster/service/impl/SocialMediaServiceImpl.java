@@ -5,6 +5,7 @@ import com.disaster.service.SocialMediaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,7 +16,8 @@ public class SocialMediaServiceImpl implements SocialMediaService {
 
     private final Map<String, List<SocialMediaReportDto>> mockData = new HashMap<>();
 
-    public SocialMediaServiceImpl() {
+    @PostConstruct
+    public void setup() {
         initializeMockData();
     }
 
